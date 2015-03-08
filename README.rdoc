@@ -11,7 +11,7 @@ issue of routing trees being unable to introspect the routes.
 
 == Source Code
 
-Source code is available on GitHub at https://github.com/jeremyevans/rack-indifferent
+Source code is available on GitHub at https://github.com/jeremyevans/roda-route_list
 
 == Basic Usage
 
