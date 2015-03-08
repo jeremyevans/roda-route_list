@@ -1,0 +1,12 @@
+
+# route: /foo
+foo
+
+  #route[bar]: /foo/bar
+  bar
+
+  #route:   GET   /foo/baz  
+  baz
+
+    #  route[quux]: GET|POST /foo/baz/quux/:quux_id
+    quux

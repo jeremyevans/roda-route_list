@@ -1,0 +1,1 @@
+[{"path":"/foo"},{"path":"/foo/bar","name":"bar"},{"path":"/foo/baz","methods":["GET"]},{"path":"/foo/baz/quux/:quux_id","methods":["GET","POST"],"name":"quux"}]
