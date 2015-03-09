@@ -37,7 +37,7 @@ describe 'roda-route_list plugin' do
     @app.plugin :route_list
     @app.load_routes 'spec/routes.json'
     @app.route do |r|
-      @app.named_route(r.remaining_path.to_sym)
+      named_route(env['PATH_INFO'].to_sym)
     end
     @app
   end
@@ -83,6 +83,16 @@ describe 'roda-route_list plugin' do
   it "should allow parsing routes from a separate file" do
     @app.load_routes('spec/routes2.json')
     @app.route_list.should == [{:path=>'/foo'}]
+  end
+
+  it "#named_route should work" do
+    body('bar').should == '/foo/bar'
+  end
+
+  it "#named_route should respect :add_script_name option" do
+    @app.opts[:add_script_name] = true
+    body('bar').should == '/foo/bar'
+    body('bar', 'SCRIPT_NAME'=>'/a').should == '/a/foo/bar'
   end
 end
 

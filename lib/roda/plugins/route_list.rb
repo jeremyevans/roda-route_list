@@ -53,6 +53,8 @@ class Roda
     # easier to use inside the route block.
     module RouteList
       module ClassMethods
+        # Load the route metadata from the given json file.  The default
+        # is routes.json in the process's working directory.
         def load_routes(file='routes.json')
           @route_list_names = {}
 
@@ -80,12 +82,17 @@ class Roda
           nil
         end
 
-        # 
+        # Return the array of route metadata hashes.
         def route_list
           load_routes unless @route_list
           @route_list
         end
 
+        # Return the path for the given named route.  If args is not given,
+        # this returns the path directly.  If args is a hash, any placeholder
+        # values in the path are replaced with the matching values in args.
+        # If args is an array, placeholder values are taken from the array
+        # in order.
         def named_route(name, args=nil)
           unless path = @route_list_names[name]
             raise RodaError, "no route exists with the name: #{name.inspect}"
@@ -120,8 +127,13 @@ class Roda
       end
       
       module InstanceMethods
+        # Calls the app's named_route method.  If the app's :add_script_name option
+        # has been setting, prefixes the resulting path with the script name.
         def named_route(name, args=nil)
-          self.class.named_route(name, args)
+          app = self.class
+          path = app.named_route(name, args)
+          path = request.script_name.to_s + path if app.opts[:add_script_name]
+          path
         end
       end
     end
