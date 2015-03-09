@@ -34,12 +34,15 @@ describe 'roda-route_list plugin' do
 
   before do 
     @app = Class.new(Roda)
-    @app.plugin :route_list
-    @app.load_routes 'spec/routes.json'
+    @app.plugin :route_list, :file=>'spec/routes.json'
     @app.route do |r|
       named_route(env['PATH_INFO'].to_sym)
     end
     @app
+  end
+
+  after do
+    File.delete('routes.json') if File.exist?('routes.json')
   end
 
   it "should correctly parse the routes from the json file" do
@@ -49,6 +52,13 @@ describe 'roda-route_list plugin' do
       {:path=>'/foo/baz', :methods=>[:GET]},
       {:path=>'/foo/baz/quux/:quux_id', :name=>:quux, :methods=>[:GET, :POST]},
     ]
+  end
+
+  it "should respect :root option when parsing json file" do
+    @app = Class.new(Roda)
+    @app.opts[:root] = 'spec'
+    @app.plugin :route_list, :file=>'routes2.json'
+    @app.route_list.should == [{:path=>'/foo'}]
   end
 
   it ".named_route should return path for route" do
@@ -81,7 +91,7 @@ describe 'roda-route_list plugin' do
   end
 
   it "should allow parsing routes from a separate file" do
-    @app.load_routes('spec/routes2.json')
+    @app.plugin :route_list, :file=>'spec/routes2.json'
     @app.route_list.should == [{:path=>'/foo'}]
   end
 

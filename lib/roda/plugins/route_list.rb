@@ -52,41 +52,16 @@ class Roda
     # The +named_route+ method is also available at the instance level to make it
     # easier to use inside the route block.
     module RouteList
+      # Set the file to load the routes metadata from.  Options:
+      # :file :: The JSON file containing the routes metadata (default: 'routes.json')
+      def self.configure(app, opts={})
+        file = File.expand_path(opts.fetch(:file, 'routes.json'), app.opts[:root])
+        app.send(:load_routes, file)
+      end
+
       module ClassMethods
-        # Load the route metadata from the given json file.  The default
-        # is routes.json in the process's working directory.
-        def load_routes(file='routes.json')
-          @route_list_names = {}
-
-          routes = JSON.parse(File.read(file))
-          @route_list = routes.map do |r|
-            path = r['path'].freeze
-            route = {:path=>path}
-
-            if methods = r['methods']
-              route[:methods] = methods.map{|x| x.to_sym}
-            end
-
-            if name = r['name']
-              name = name.to_sym
-              route[:name] = name.to_sym
-              @route_list_names[name] = path
-            end
-
-            route.freeze
-          end
-
-          @route_list.freeze
-          @route_list_names.freeze
-          
-          nil
-        end
-
-        # Return the array of route metadata hashes.
-        def route_list
-          load_routes unless @route_list
-          @route_list
-        end
+        # Array of route metadata hashes.
+        attr_reader :route_list
 
         # Return the path for the given named route.  If args is not given,
         # this returns the path directly.  If args is a hash, any placeholder
@@ -123,6 +98,35 @@ class Roda
           end
 
           path
+        end
+
+        private
+
+        # Load the route metadata from the given json file.
+        def load_routes(file)
+          @route_list_names = {}
+
+          routes = JSON.parse(File.read(file))
+          @route_list = routes.map do |r|
+            path = r['path'].freeze
+            route = {:path=>path}
+
+            if methods = r['methods']
+              route[:methods] = methods.map{|x| x.to_sym}
+            end
+
+            if name = r['name']
+              name = name.to_sym
+              route[:name] = name.to_sym
+              @route_list_names[name] = path
+            end
+
+            route.freeze
+          end.freeze
+
+          @route_list_names.freeze
+          
+          nil
         end
       end
       
