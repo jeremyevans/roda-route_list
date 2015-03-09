@@ -60,6 +60,35 @@ get route information:
 The +named_route+ method is also available at the instance level to make it
 easier to use inside the route block.
 
+=== Automatically Updating the Routes Metadata
+
+==== On Heroku
+
+You can get this to work on Heroku by hooking into the facility for
+precompiling assets.  If this consider your route list an asset, this
+makes sense.  You just need to add an assets:precompile task, similar to
+this (or add the code an existing assets:precompile task):
+
+  namespace :assets do
+    desc "Update the routes metadata"
+    task :precompile do
+      sh 'roda-parse_routes -f routes.json app.rb'
+    end
+  end
+
+==== Otherwise
+
+At the top of your Roda app file, or at least before you create the Roda app
+subclass, just call the <tt>roda-parse_routes</tt> program:
+
+  # app.rb
+  system 'roda-parse_routes', '-f', 'routes.json', __FILE__
+  require 'roda'
+
+  class App < Roda
+    # ...
+  end
+
 == License
 
 MIT
