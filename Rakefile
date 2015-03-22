@@ -27,6 +27,7 @@ begin
   spec = lambda do |name, files, d|
     lib_dir = File.join(File.dirname(File.expand_path(__FILE__)), 'lib')
     ENV['RUBYLIB'] ? (ENV['RUBYLIB'] += ":#{lib_dir}") : (ENV['RUBYLIB'] = lib_dir)
+    ENV['RUBYOPT'] ? (ENV['RUBYOPT'] += " -rubygems") : (ENV['RUBYOPT'] = '-rubygems') if RUBY_VERSION < '1.9'
     desc d
     spec_class.new(name) do |t|
       ENV['RUBY'] = FileUtils::RUBY
