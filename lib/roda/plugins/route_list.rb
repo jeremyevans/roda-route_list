@@ -112,7 +112,7 @@ class Roda
             route = {:path=>path}
 
             if methods = r['methods']
-              route[:methods] = methods.map{|x| x.to_sym}
+              route[:methods] = methods.map(&:to_sym)
             end
 
             if name = r['name']
