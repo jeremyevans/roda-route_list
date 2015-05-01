@@ -22,5 +22,5 @@ the routes.
 END
   s.required_ruby_version = ">= 1.8.7"
   s.add_dependency "roda"
-  s.add_development_dependency "rspec", '>= 1.3'
+  s.add_development_dependency "minitest"
 end

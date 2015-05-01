@@ -1,16 +1,6 @@
 require 'roda'
 require 'json'
-
-if defined?(RSpec)
-  require 'rspec/version'
-  if RSpec::Version::STRING >= '2.11.0'
-    RSpec.configure do |config|
-      config.expect_with :rspec do |c|
-        c.syntax = :should
-      end
-    end
-  end
-end
+require 'minitest/autorun'
 
 describe 'roda-route_list plugin' do
   def req(path='/', env={})
@@ -46,7 +36,7 @@ describe 'roda-route_list plugin' do
   end
 
   it "should correctly parse the routes from the json file" do
-    @app.route_list.should == [
+    @app.route_list.must_equal [
       {:path=>'/foo'},
       {:path=>'/foo/bar', :name=>:bar},
       {:path=>'/foo/baz', :methods=>[:GET]},
@@ -58,51 +48,51 @@ describe 'roda-route_list plugin' do
     @app = Class.new(Roda)
     @app.opts[:root] = 'spec'
     @app.plugin :route_list, :file=>'routes2.json'
-    @app.route_list.should == [{:path=>'/foo'}]
+    @app.route_list.must_equal [{:path=>'/foo'}]
   end
 
   it ".named_route should return path for route" do
-    @app.named_route(:bar).should == '/foo/bar'
-    @app.named_route(:quux).should == '/foo/baz/quux/:quux_id'
+    @app.named_route(:bar).must_equal '/foo/bar'
+    @app.named_route(:quux).must_equal '/foo/baz/quux/:quux_id'
   end
 
   it ".named_route should return path for route when given a values hash" do
-    @app.named_route(:quux, :quux_id=>3).should == '/foo/baz/quux/3'
+    @app.named_route(:quux, :quux_id=>3).must_equal '/foo/baz/quux/3'
   end
 
   it ".named_route should return path for route when given a values array" do
-    @app.named_route(:quux, [3]).should == '/foo/baz/quux/3'
+    @app.named_route(:quux, [3]).must_equal '/foo/baz/quux/3'
   end
 
   it ".named_route should raise RodaError if there is no matching route" do
-    proc{@app.named_route(:foo)}.should raise_error(Roda::RodaError)
+    proc{@app.named_route(:foo)}.must_raise(Roda::RodaError)
   end
 
   it ".named_route should raise RodaError if there is no matching value when using a values hash" do
-    proc{@app.named_route(:quux, {})}.should raise_error(Roda::RodaError)
+    proc{@app.named_route(:quux, {})}.must_raise(Roda::RodaError)
   end
 
   it ".named_route should raise RodaError if there is no matching value when using a values array" do
-    proc{@app.named_route(:quux, [])}.should raise_error(Roda::RodaError)
+    proc{@app.named_route(:quux, [])}.must_raise(Roda::RodaError)
   end
 
   it ".named_route should raise RodaError if there are too many values when using a values array" do
-    proc{@app.named_route(:quux, [3, 1])}.should raise_error(Roda::RodaError)
+    proc{@app.named_route(:quux, [3, 1])}.must_raise(Roda::RodaError)
   end
 
   it "should allow parsing routes from a separate file" do
     @app.plugin :route_list, :file=>'spec/routes2.json'
-    @app.route_list.should == [{:path=>'/foo'}]
+    @app.route_list.must_equal [{:path=>'/foo'}]
   end
 
   it "#named_route should work" do
-    body('bar').should == '/foo/bar'
+    body('bar').must_equal '/foo/bar'
   end
 
   it "#named_route should respect :add_script_name option" do
     @app.opts[:add_script_name] = true
-    body('bar').should == '/foo/bar'
-    body('bar', 'SCRIPT_NAME'=>'/a').should == '/a/foo/bar'
+    body('bar').must_equal '/foo/bar'
+    body('bar', 'SCRIPT_NAME'=>'/a').must_equal '/a/foo/bar'
   end
 end
 
@@ -112,8 +102,8 @@ describe 'roda-route_parser executable' do
   end
 
   it "should correctly parse the routes" do
-    system(ENV['RUBY'], "bin/roda-parse_routes", "-f", "spec/routes-example.json", "spec/routes.example")
-    File.file?("spec/routes-example.json").should == true
-    JSON.parse(File.read('spec/routes-example.json')).should == JSON.parse(File.read('spec/routes.json'))
+    system(ENV['RUBY'] || 'ruby', "bin/roda-parse_routes", "-f", "spec/routes-example.json", "spec/routes.example")
+    File.file?("spec/routes-example.json").must_equal true
+    JSON.parse(File.read('spec/routes-example.json')).must_equal JSON.parse(File.read('spec/routes.json'))
   end
 end

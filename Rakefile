@@ -10,38 +10,14 @@ end
 
 ### Specs
 
-begin
-  begin
-    raise LoadError if ENV['RSPEC1']
-    # RSpec 2
-    require "rspec/core/rake_task"
-    spec_class = RSpec::Core::RakeTask
-    spec_files_meth = :pattern=
-  rescue LoadError
-    # RSpec 1
-    require "spec/rake/spectask"
-    spec_class = Spec::Rake::SpecTask
-    spec_files_meth = :spec_files=
-  end
-
-  spec = lambda do |name, files, d|
-    lib_dir = File.join(File.dirname(File.expand_path(__FILE__)), 'lib')
-    ENV['RUBYLIB'] ? (ENV['RUBYLIB'] += ":#{lib_dir}") : (ENV['RUBYLIB'] = lib_dir)
-    ENV['RUBYOPT'] ? (ENV['RUBYOPT'] += " -rubygems") : (ENV['RUBYOPT'] = '-rubygems') if RUBY_VERSION < '1.9'
-    desc d
-    spec_class.new(name) do |t|
-      ENV['RUBY'] = FileUtils::RUBY
-      t.send(spec_files_meth, files)
-    end
-  end
-
-  task :default => [:spec]
-  spec.call("spec", Dir["spec/*_spec.rb"], "Run specs")
-rescue LoadError
-  task :default do
-    puts "Must install rspec to run the default task (which runs specs)"
-  end
+desc "Build roda-route_list gem"
+task :spec do |p|
+  ENV['RUBY'] = FileUtils::RUBY
+  ENV['RUBYLIB'] = "ENV['RUBYLIB']:lib"
+  ENV['RUBYOPT'] = "-rubygems"
+  sh %{#{FileUtils::RUBY} spec/roda-route_list_spec.rb }
 end
+task :default=>:spec
 
 ### RDoc
 
