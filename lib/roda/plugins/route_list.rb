@@ -41,15 +41,15 @@ class Roda
     #   route_list # => [{:path=>'/path/to/foo', :methods=>['GET', 'POST']}]
     #
     #   # path for the route with the given name
-    #   named_route(:route_name) # => '/path/to/foo'
+    #   listed_route(:route_name) # => '/path/to/foo'
     #
     #   # path for the route with the given name, supplying hash for placeholders
-    #   named_route(:foo, :foo_id=>3) # => '/path/to/foo/3'
+    #   listed_route(:foo, :foo_id=>3) # => '/path/to/foo/3'
     #
     #   # path for the route with the given name, supplying array for placeholders
-    #   named_route(:foo, [3]) # => '/path/to/foo/3'
+    #   listed_route(:foo, [3]) # => '/path/to/foo/3'
     #
-    # The +named_route+ method is also available at the instance level to make it
+    # The +listed_route+ method is also available at the instance level to make it
     # easier to use inside the route block.
     module RouteList
       # Set the file to load the routes metadata from.  Options:
@@ -68,7 +68,7 @@ class Roda
         # values in the path are replaced with the matching values in args.
         # If args is an array, placeholder values are taken from the array
         # in order.
-        def named_route(name, args=nil)
+        def listed_route(name, args=nil)
           unless path = @route_list_names[name]
             raise RodaError, "no route exists with the name: #{name.inspect}"
           end
@@ -131,11 +131,11 @@ class Roda
       end
       
       module InstanceMethods
-        # Calls the app's named_route method.  If the app's :add_script_name option
+        # Calls the app's listed_route method.  If the app's :add_script_name option
         # has been setting, prefixes the resulting path with the script name.
-        def named_route(name, args=nil)
+        def listed_route(name, args=nil)
           app = self.class
-          path = app.named_route(name, args)
+          path = app.listed_route(name, args)
           path = request.script_name.to_s + path if app.opts[:add_script_name]
           path
         end

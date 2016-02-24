@@ -26,7 +26,7 @@ describe 'roda-route_list plugin' do
     @app = Class.new(Roda)
     @app.plugin :route_list, :file=>'spec/routes.json'
     @app.route do |r|
-      named_route(env['PATH_INFO'].to_sym)
+      listed_route(env['PATH_INFO'].to_sym)
     end
     @app
   end
@@ -51,33 +51,33 @@ describe 'roda-route_list plugin' do
     @app.route_list.must_equal [{:path=>'/foo'}]
   end
 
-  it ".named_route should return path for route" do
-    @app.named_route(:bar).must_equal '/foo/bar'
-    @app.named_route(:quux).must_equal '/foo/baz/quux/:quux_id'
+  it ".listed_route should return path for route" do
+    @app.listed_route(:bar).must_equal '/foo/bar'
+    @app.listed_route(:quux).must_equal '/foo/baz/quux/:quux_id'
   end
 
-  it ".named_route should return path for route when given a values hash" do
-    @app.named_route(:quux, :quux_id=>3).must_equal '/foo/baz/quux/3'
+  it ".listed_route should return path for route when given a values hash" do
+    @app.listed_route(:quux, :quux_id=>3).must_equal '/foo/baz/quux/3'
   end
 
-  it ".named_route should return path for route when given a values array" do
-    @app.named_route(:quux, [3]).must_equal '/foo/baz/quux/3'
+  it ".listed_route should return path for route when given a values array" do
+    @app.listed_route(:quux, [3]).must_equal '/foo/baz/quux/3'
   end
 
-  it ".named_route should raise RodaError if there is no matching route" do
-    proc{@app.named_route(:foo)}.must_raise(Roda::RodaError)
+  it ".listed_route should raise RodaError if there is no matching route" do
+    proc{@app.listed_route(:foo)}.must_raise(Roda::RodaError)
   end
 
-  it ".named_route should raise RodaError if there is no matching value when using a values hash" do
-    proc{@app.named_route(:quux, {})}.must_raise(Roda::RodaError)
+  it ".listed_route should raise RodaError if there is no matching value when using a values hash" do
+    proc{@app.listed_route(:quux, {})}.must_raise(Roda::RodaError)
   end
 
-  it ".named_route should raise RodaError if there is no matching value when using a values array" do
-    proc{@app.named_route(:quux, [])}.must_raise(Roda::RodaError)
+  it ".listed_route should raise RodaError if there is no matching value when using a values array" do
+    proc{@app.listed_route(:quux, [])}.must_raise(Roda::RodaError)
   end
 
-  it ".named_route should raise RodaError if there are too many values when using a values array" do
-    proc{@app.named_route(:quux, [3, 1])}.must_raise(Roda::RodaError)
+  it ".listed_route should raise RodaError if there are too many values when using a values array" do
+    proc{@app.listed_route(:quux, [3, 1])}.must_raise(Roda::RodaError)
   end
 
   it "should allow parsing routes from a separate file" do
@@ -85,11 +85,11 @@ describe 'roda-route_list plugin' do
     @app.route_list.must_equal [{:path=>'/foo'}]
   end
 
-  it "#named_route should work" do
+  it "#listed_route should work" do
     body('bar').must_equal '/foo/bar'
   end
 
-  it "#named_route should respect :add_script_name option" do
+  it "#listed_route should respect :add_script_name option" do
     @app.opts[:add_script_name] = true
     body('bar').must_equal '/foo/bar'
     body('bar', 'SCRIPT_NAME'=>'/a').must_equal '/a/foo/bar'

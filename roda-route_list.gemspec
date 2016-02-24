@@ -1,6 +1,6 @@
 spec = Gem::Specification.new do |s|
   s.name = 'roda-route_list'
-  s.version = '1.0.0'
+  s.version = '2.0.0'
   s.platform = Gem::Platform::RUBY
   s.has_rdoc = true
   s.extra_rdoc_files = ["README.rdoc", "CHANGELOG", "MIT-LICENSE"]

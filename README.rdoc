@@ -49,15 +49,15 @@ get route information:
   route_list # => [{:path=>'/path/to/foo', :methods=>['GET', 'POST']}]
 
   # path for the route with the given name
-  named_route(:route_name) # => '/path/to/foo'
+  listed_route(:route_name) # => '/path/to/foo'
 
   # path for the route with the given name, supplying hash for placeholders
-  named_route(:foo, :foo_id=>3) # => '/path/to/foo/3'
+  listed_route(:foo, :foo_id=>3) # => '/path/to/foo/3'
 
   # path for the route with the given name, supplying array for placeholders
-  named_route(:foo, [3]) # => '/path/to/foo/3'
+  listed_route(:foo, [3]) # => '/path/to/foo/3'
 
-The +named_route+ method is also available at the instance level to make it
+The +listed_route+ method is also available at the instance level to make it
 easier to use inside the route block.
 
 === Automatically Updating the Routes Metadata
