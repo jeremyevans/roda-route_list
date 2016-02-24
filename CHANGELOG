@@ -1,6 +1,6 @@
 = 2.0.0 (2016-02-24)
 
-* Use Roda.listed_route instead of Road.named_route to not conflict with multi_route plugin (jeremyevans) (#1)
+* Use Roda.listed_route instead of Roda.named_route to not conflict with multi_route plugin (jeremyevans) (#1)
 
 = 1.0.0 (2015-03-08)
 
