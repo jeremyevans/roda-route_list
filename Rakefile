@@ -10,7 +10,7 @@ end
 
 ### Specs
 
-desc "Build roda-route_list gem"
+desc "Run all specs"
 task :spec do |p|
   ENV['RUBY'] = FileUtils::RUBY
   ENV['RUBYLIB'] = "ENV['RUBYLIB']:lib"
