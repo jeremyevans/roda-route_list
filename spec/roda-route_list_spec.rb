@@ -1,6 +1,9 @@
 require 'roda'
 require 'json'
+gem 'minitest'
 require 'minitest/autorun'
+
+$: << File.join(File.dirname(__FILE__), '..', 'lib')
 
 describe 'roda-route_list plugin' do
   def req(path='/', env={})
