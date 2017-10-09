@@ -5,6 +5,7 @@ require 'json'
 require File.join(File.dirname(File.dirname(File.expand_path(__FILE__))), 'lib', 'roda-route_parser')
 
 file = $stdout
+json_gen_opts = {}
 options = OptionParser.new do |opts|
   opts.banner = "roda-parse_routes: Parse route comments from roda app files"
   opts.define_head "Usage: roda-parse_routes [options] [file] ..."
@@ -18,8 +19,12 @@ options = OptionParser.new do |opts|
   opts.on("-f", "--file ", "output to given file instead of stdout") do  |v|
     file = File.open(v, 'wb')
   end
+
+  opts.on("-p", "--pretty", "output pretty json (with indentation and newlines)") do
+    json_gen_opts = {:indent => '  ', :space => ' ', :object_nl => "\n", :array_nl => "\n"}
+  end
 end
 opts = options
 opts.parse!
 
-file.puts(RodaRouteParser.parse(ARGF).to_json)
+file.puts(RodaRouteParser.parse(ARGF).to_json(json_gen_opts))

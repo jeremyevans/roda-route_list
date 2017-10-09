@@ -98,12 +98,29 @@ end
 
 describe 'roda-route_parser executable' do
   after do
-    File.delete "spec/routes-example.json"
+    %w[spec/routes-example.json spec/routes-example-pretty.json].each do |file|
+      begin
+        File.delete(file)
+      rescue Errno::ENOENT
+      end
+    end
   end
 
   it "should correctly parse the routes" do
     system(ENV['RUBY'] || 'ruby', "bin/roda-parse_routes", "-f", "spec/routes-example.json", "spec/routes.example")
     File.file?("spec/routes-example.json").must_equal true
     JSON.parse(File.read('spec/routes-example.json')).must_equal JSON.parse(File.read('spec/routes.json'))
+  end
+
+  it "should correctly write the pretty routes" do
+    system(ENV['RUBY'] || 'ruby', "bin/roda-parse_routes", "-f", "spec/routes-example-pretty.json", "-p", "spec/routes.example")
+    File.file?("spec/routes-example-pretty.json").must_equal true
+    File.read("spec/routes-example-pretty.json").must_equal(File.read("spec/routes-pretty.json"))
+  end
+
+  it "should correctly parse the pretty routes" do
+    system(ENV['RUBY'] || 'ruby', "bin/roda-parse_routes", "-f", "spec/routes-example-pretty.json", "-p", "spec/routes.example")
+    File.file?("spec/routes-example-pretty.json").must_equal true
+    JSON.parse(File.read('spec/routes-example-pretty.json')).must_equal JSON.parse(File.read('spec/routes.json'))
   end
 end
