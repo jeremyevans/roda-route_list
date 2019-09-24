@@ -22,4 +22,5 @@ END
   s.required_ruby_version = ">= 1.8.7"
   s.add_dependency "roda"
   s.add_development_dependency "minitest"
+  s.add_development_dependency "minitest-global_expectations"
 end
