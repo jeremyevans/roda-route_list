@@ -77,8 +77,15 @@ class Roda
             if args.is_a?(Hash)
               range = 1..-1
               path = path.gsub(/:[^\/]+/) do |match|
-                unless value = args[match[range].to_sym]
+                key = match[range].to_sym
+                unless args.key?(key)
                   raise RodaError, "no matching value exists in the hash for named route #{name}: #{match}"
+                end
+
+                value = args[key]
+
+                if value.nil?
+                  raise RodaError, "nil value exists in the hash for named route #{name}: #{match}"
                 end
                 value
               end

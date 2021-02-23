@@ -73,7 +73,13 @@ describe 'roda-route_list plugin' do
   end
 
   it ".listed_route should raise RodaError if there is no matching value when using a values hash" do
-    proc{@app.listed_route(:quux, {})}.must_raise(Roda::RodaError)
+    ex = proc{@app.listed_route(:quux, {})}.must_raise(Roda::RodaError)
+    ex.message.must_equal "no matching value exists in the hash for named route quux: :quux_id"
+  end
+
+  it ".listed_route should raise RodaError if provided value is nil when using a values hash" do
+    ex = proc{@app.listed_route(:quux, {quux_id: nil})}.must_raise(Roda::RodaError)
+    ex.message.must_equal "nil value exists in the hash for named route quux: :quux_id"
   end
 
   it ".listed_route should raise RodaError if there is no matching value when using a values array" do
