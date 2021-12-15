@@ -13,7 +13,7 @@ end
 desc "Run all specs"
 task :spec do |p|
   ENV['RUBY'] = FileUtils::RUBY
-  sh %{#{FileUtils::RUBY} spec/roda-route_list_spec.rb }
+  sh %{#{FileUtils::RUBY} #{"-w" if RUBY_VERSION >= '3'} spec/roda-route_list_spec.rb }
 end
 task :default=>:spec
 
