@@ -17,6 +17,13 @@ task :spec do |p|
 end
 task :default=>:spec
 
+
+desc "Run tests with coverage"
+task :spec_cov do
+  ENV['COVERAGE'] = '1'
+  sh "#{FileUtils::RUBY} spec/roda-route_list_spec.rb"
+end
+
 ### RDoc
 
 RDOC_DEFAULT_OPTS = ["--quiet", "--line-numbers", "--inline-source", '--title', 'roda-route_list: List routes when using Roda']
