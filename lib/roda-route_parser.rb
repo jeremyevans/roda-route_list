@@ -10,7 +10,7 @@ class RodaRouteParser
     end
 
     routes = []
-    regexp = /\A\s*#\s*route(?:\[(\w+)\])?:\s+(?:([A-Z|]+)?\s+)?(\S+)\s*\z/
+    regexp = /\A\s*#\s*route(?:\[([\w|\.|-]+)\])?:\s+(?:([A-Z|]+)?\s+)?(\S+)\s*\z/
     input.each_line do |line|
       if md = regexp.match(line)
         name, methods, route = md.captures
