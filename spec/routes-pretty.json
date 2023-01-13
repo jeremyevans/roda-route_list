@@ -13,7 +13,7 @@
     ]
   },
   {
-    "path": "/foo/baz/quux/:quux_id",
+    "path": "/foo/baz/quux/{quux_id}",
     "methods": [
       "GET",
       "POST"

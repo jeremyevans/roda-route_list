@@ -55,7 +55,7 @@ describe 'roda-route_list plugin' do
       {:path=>'/foo'},
       {:path=>'/foo/bar', :name=>:bar},
       {:path=>'/foo/baz', :methods=>[:GET]},
-      {:path=>'/foo/baz/quux/:quux_id', :name=>:quux, :methods=>[:GET, :POST]},
+      {:path=>'/foo/baz/quux/{quux_id}', :name=>:quux, :methods=>[:GET, :POST]},
     ]
   end
 
@@ -68,7 +68,7 @@ describe 'roda-route_list plugin' do
 
   it ".listed_route should return path for route" do
     @app.listed_route(:bar).must_equal '/foo/bar'
-    @app.listed_route(:quux).must_equal '/foo/baz/quux/:quux_id'
+    @app.listed_route(:quux).must_equal '/foo/baz/quux/{quux_id}'
   end
 
   it ".listed_route should return path for route when given a values hash" do
