@@ -30,7 +30,7 @@ describe 'roda-route_list plugin' do
   end
   
   def body(path='/', env={})
-    s = ''
+    s = String.new
     b = req(path, env)[2]
     b.each{|x| s << x}
     b.close if b.respond_to?(:close)
