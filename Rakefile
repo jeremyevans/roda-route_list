@@ -7,7 +7,7 @@ CLEAN.include ["rdoc", "roda-route_list-*.gem", "coverage"]
 desc "Run all specs"
 task :spec do |p|
   ENV['RUBY'] = FileUtils::RUBY
-  sh %{#{FileUtils::RUBY} #{"-w" if RUBY_VERSION >= '3'} spec/roda-route_list_spec.rb }
+  sh %{#{FileUtils::RUBY} #{"-w" if RUBY_VERSION >= '3'} #{'-W:strict_unused_block' if RUBY_VERSION >= '3.4'} spec/roda-route_list_spec.rb }
 end
 task :default=>:spec
 
