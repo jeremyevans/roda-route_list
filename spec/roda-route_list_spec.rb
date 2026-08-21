@@ -10,6 +10,7 @@ if ENV.delete('COVERAGE')
 end
 
 require 'roda'
+require_relative '../lib/roda-route_parser'
 require 'json'
 gem 'minitest'
 ENV['MT_NO_PLUGINS'] = '1' # Work around stupid autoloading of plugins
@@ -143,5 +144,9 @@ describe 'roda-route_parser executable' do
     system(ENV['RUBY'] || 'ruby', "bin/roda-parse_routes", "-f", "spec/routes-example-pretty.json", "-p", "spec/routes.example")
     File.file?("spec/routes-example-pretty.json").must_equal true
     JSON.parse(File.read('spec/routes-example-pretty.json')).must_equal JSON.parse(File.read('spec/routes.json'))
+  end
+
+  it "should correctly parse the routes using RodaRouteParser.parse" do
+    RodaRouteParser.parse(File.read("spec/routes.example")).must_equal JSON.parse(File.read('spec/routes.json'))
   end
 end
